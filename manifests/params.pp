@@ -178,4 +178,7 @@ class zookeeper::params {
   $remove_realm_principal = false
   # whitelist of Four Letter Words commands, see https://zookeeper.apache.org/doc/r3.4.12/zookeeperAdmin.html#sc_zkCommands
   $whitelist_4lw = []
+  $admin_admin_enableserver = true
+  $admin_serveraddress = '0.0.0.0'
+  $admin_serverport = 8080
 }

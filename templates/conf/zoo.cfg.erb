@@ -142,3 +142,22 @@ kerberos.removeRealmFromPrincipal=true
 # Supported since 3.4.10
 4lw.commands.whitelist=<%= scope.lookupvar("zookeeper::whitelist_4lw").join(',') %>
 <% end -%>
+
+# Set to "false" to disable the AdminServer. By default the AdminServer is enabled.
+<% if ! scope.lookupvar("zookeeper::admin_enableserver") -%>
+admin.enableServer=<%= scope.lookupvar("zookeeper::admin_enableserver") %>
+<% else -%>
+#admin.enableServer=true
+<% end -%>
+# The address the embedded Jetty server listens on. Defaults to 0.0.0.0
+<% if scope.lookupvar("zookeeper::admin_serveraddress") -%>
+admin.serverAddress=<%= scope.lookupvar("zookeeper::admin_serveraddress") %>
+<% else -%>
+#admin.serverAddress=0.0.0.0
+<% end -%>
+# The port the embedded Jetty server listens on. Defaults to 8080
+<% if scope.lookupvar("zookeeper::admin_serverport") -%>
+admin.serverPort=<%= scope.lookupvar("zookeeper::admin_serverport") %>
+<% else -%>
+#admin.serverPort=8080
+<% end -%>

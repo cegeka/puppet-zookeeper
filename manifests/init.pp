@@ -110,6 +110,9 @@ class zookeeper(
   Boolean                                    $remove_realm_principal   = $zookeeper::params::remove_realm_principal,
   # four letter words whitelist
   Array[String]                              $whitelist_4lw            = $zookeeper::params::whitelist_4lw,
+  Boolean                                    $admin_enableserver       = $zookeeper::params::admin_enableserver,
+  String                                     $admin_serveraddress      = $zookeeper::params::admin_serveraddress,
+  Integer                                    $admin_serverport         = $zookeeper::params::admin_serverport,
 ) inherits ::zookeeper::params {
 
   if $pid_file {

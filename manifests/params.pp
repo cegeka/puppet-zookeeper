@@ -20,10 +20,11 @@ class zookeeper::params {
       }
 
       $_os_overrides = {
-        'packages'         => ['zookeeper', 'zookeeperd'],
-        'service_name'     => 'zookeeper',
-        'service_provider' => $initstyle,
-        'shell'            => '/bin/false',
+        'packages'                 => ['zookeeper', 'zookeeperd'],
+        'service_name'             => 'zookeeper',
+        'service_provider'         => $initstyle,
+        'shell'                    => '/bin/false',
+        'initialize_datastore_bin' => '/usr/bin/zookeeper-server-initialize'
       }
       # 'environment' file probably read just by Debian
       # see #16, #81
@@ -44,10 +45,11 @@ class zookeeper::params {
       }
 
       $_os_overrides = {
-        'packages'         => ['zookeeper', 'zookeeper-server'],
-        'service_name'     => 'zookeeper-server',
-        'service_provider' => $initstyle,
-        'shell'            => '/sbin/nologin',
+        'packages'                 => ['zookeeper', 'zookeeper-server'],
+        'service_name'             => 'zookeeper-server',
+        'service_provider'         => $initstyle,
+        'shell'                    => '/sbin/nologin',
+        'initialize_datastore_bin' => '/usr/bin/zookeeper-server-initialize'
       }
       $environment_file = 'java.env'
     }
@@ -60,10 +62,11 @@ class zookeeper::params {
       }
 
       $_os_overrides = {
-        'packages'         => ['zookeeper', 'zookeeper-server'],
-        'service_name'     => 'zookeeper-server',
-        'service_provider' => $initstyle,
-        'shell'            => '/bin/false',
+        'packages'                 => ['zookeeper', 'zookeeper-server'],
+        'service_name'             => 'zookeeper-server',
+        'service_provider'         => $initstyle,
+        'shell'                    => '/bin/false',
+        'initialize_datastore_bin' => '/usr/bin/zookeeper-server-initialize'
       }
       $environment_file = 'java.env'
     }
@@ -126,6 +129,8 @@ class zookeeper::params {
   $client_ip = undef # use e.g. $::ipaddress if you want to bind to single interface
   $client_port = 2181
   $secure_client_port = undef
+  $quorum_listen_on_all_ips = false
+  $port_unification = undef
   $datastore = '/var/lib/zookeeper'
   # datalogstore used to put transaction logs in separate location than snapshots
   $datalogstore = undef
@@ -134,6 +139,7 @@ class zookeeper::params {
   $id = '1'
   $init_limit = 10
   $initialize_datastore = false
+  $initialize_datastore_bin = $_params['initialize_datastore_bin']
   $leader = true
   $leader_port = 3888
   $log_dir = '/var/log/zookeeper'
@@ -145,6 +151,7 @@ class zookeeper::params {
   # interval in hours, purging enabled when >= 1
   $purge_interval = 0
   $servers = []
+  $pre_alloc_size = 65536
   $snap_count = 10000
   # since zookeeper 3.4, for earlier version cron task might be used
   $snap_retain_count = 3
@@ -170,7 +177,7 @@ class zookeeper::params {
   $sasl_users = {}
   $keytab_path = '/etc/zookeeper/conf/zookeeper.keytab'
   $principal = "zookeeper/${facts['networking']['fqdn']}"
-  $realm = pick($trusted['domain'], $trusted['certname'])
+  $realm = pick($trusted['domain'], $trusted['certname'], 'puppet')
   $store_key = true
   $use_keytab = true
   $use_ticket_cache = false
@@ -178,7 +185,12 @@ class zookeeper::params {
   $remove_realm_principal = false
   # whitelist of Four Letter Words commands, see https://zookeeper.apache.org/doc/r3.4.12/zookeeperAdmin.html#sc_zkCommands
   $whitelist_4lw = []
+  # Admin Server
   $admin_admin_enableserver = true
   $admin_serveraddress = '0.0.0.0'
   $admin_serverport = 8080
+  # Metrics Providers
+  $metrics_provider_classname = undef
+  $metrics_provider_http_port = 7000
+  $metrics_provider_export_jvm_info = true
 }
